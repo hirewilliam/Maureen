@@ -494,15 +494,28 @@ const EJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
 const EJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
 emailjs.init(EJS_PUBLIC_KEY);
 
-/* ── API Key ── */
+/* ── API Key — stored in localStorage + cookie for max persistence ── */
 const KEY_STORE = 'hub_anthropic_key';
-function getApiKey() { return localStorage.getItem(KEY_STORE) || ''; }
+
+function getApiKey() {
+  const fromStorage = localStorage.getItem(KEY_STORE);
+  if (fromStorage) return fromStorage;
+  const match = document.cookie.match(new RegExp('(?:^|; )' + KEY_STORE + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : '';
+}
+
+function persistApiKey(key) {
+  localStorage.setItem(KEY_STORE, key);
+  const exp = new Date();
+  exp.setFullYear(exp.getFullYear() + 1);
+  document.cookie = KEY_STORE + '=' + encodeURIComponent(key) + '; expires=' + exp.toUTCString() + '; path=/; SameSite=Strict';
+}
 
 function saveKey() {
   const val = document.getElementById('setupKeyInput').value.trim();
   const err = document.getElementById('setupError');
   if (!val.startsWith('sk-ant-')) { err.textContent = '⚠️ That doesn\'t look right. The key should start with sk-ant-'; return; }
-  localStorage.setItem(KEY_STORE, val);
+  persistApiKey(val);
   err.textContent = '';
   showHome();
 }
