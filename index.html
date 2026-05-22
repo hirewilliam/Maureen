@@ -921,7 +921,7 @@ async function sendToClaude(a) {
         'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify({
-        model:      'claude-opus-4-5',
+        model:      'claude-sonnet-4-6',
         max_tokens: 1024,
         system:     a.system,
         messages:   history,
@@ -929,6 +929,13 @@ async function sendToClaude(a) {
     });
 
     const data  = await resp.json();
+
+    if (data.error) {
+      thinkEl.remove();
+      addBubble('bot', '⚠️ ' + data.error.message, '#fff0f0', '⚠️');
+      return;
+    }
+
     const reply = data?.content?.[0]?.text ||
       "I'm sorry, I didn't get a response. Please try again.";
 
@@ -939,7 +946,7 @@ async function sendToClaude(a) {
   } catch(err) {
     thinkEl.remove();
     addBubble('bot',
-      '⚠️ Something went wrong connecting. Please check your internet and try again.',
+      '⚠️ Could not reach Claude. Please check your internet connection and try again.',
       '#fff0f0', '⚠️');
   }
 }
