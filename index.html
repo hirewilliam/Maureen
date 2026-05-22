@@ -51,9 +51,86 @@
   }
 
   /* ════════════════════════════════
+     SETUP SCREEN
+  ════════════════════════════════ */
+  #setupScreen {
+    display: none;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 18px;
+    background:
+      radial-gradient(ellipse at 15% 5%, #f0dcf8 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 95%, #dceeff 0%, transparent 45%),
+      var(--bg);
+  }
+  #setupScreen.active { display: flex; }
+
+  .setup-card {
+    background: var(--white);
+    border-radius: 28px;
+    padding: 44px 36px 36px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.13);
+    border-top: 7px solid var(--pink);
+    text-align: center;
+  }
+  .setup-icon { font-size: 3.2rem; margin-bottom: 16px; }
+  .setup-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--pink-dk);
+    margin-bottom: 10px;
+  }
+  .setup-sub {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sub);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .setup-input {
+    width: 100%;
+    border: 2.5px solid #ddd;
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .setup-input:focus { border-color: var(--pink); }
+  .setup-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--pink);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .setup-btn:hover { opacity: 0.88; }
+  .setup-error {
+    color: #c0392b;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-top: 12px;
+    min-height: 22px;
+  }
+
+  /* ════════════════════════════════
      HOME SCREEN
   ════════════════════════════════ */
   #homeScreen {
+    display: none;
     min-height: 100vh;
     padding: 30px 18px 40px;
     background:
@@ -61,16 +138,33 @@
       radial-gradient(ellipse at 85% 95%, #dceeff 0%, transparent 45%),
       var(--bg);
   }
+  #homeScreen.active { display: block; }
 
   .home-header {
     text-align: center;
     margin-bottom: 34px;
+    position: relative;
   }
   .home-header .title {
     font-size: 2.1rem;
     font-weight: 900;
     color: var(--text);
   }
+  .settings-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 42px; height: 42px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .settings-btn:hover { background: #e0e0e0; }
 
   /* ── 4 Agent buttons ── */
   .agent-grid {
@@ -184,9 +278,7 @@
     border: 2px solid #ece8e3;
     transition: transform 0.15s, box-shadow 0.15s;
   }
-  .folder-tile.clickable {
-    cursor: pointer;
-  }
+  .folder-tile.clickable { cursor: pointer; }
   .folder-tile.clickable:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 22px rgba(58,130,212,0.18);
@@ -211,7 +303,7 @@
   }
 
   /* ════════════════════════════════
-     CHAT SCREEN  (full page)
+     CHAT SCREEN
   ════════════════════════════════ */
   #chatScreen {
     display: none;
@@ -221,7 +313,6 @@
   }
   #chatScreen.active { display: flex; }
 
-  /* top bar */
   .chat-topbar {
     display: flex;
     align-items: center;
@@ -253,15 +344,8 @@
     font-size: 1.7rem;
     flex-shrink: 0;
   }
-  .chat-topbar-info .agent-title {
-    font-size: 1.25rem;
-    font-weight: 900;
-  }
-  .chat-topbar-info .agent-status {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #22a060;
-  }
+  .chat-topbar-info .agent-title { font-size: 1.25rem; font-weight: 900; }
+  .chat-topbar-info .agent-status { font-size: 0.85rem; font-weight: 700; color: #22a060; }
 
   .clear-chat-btn {
     margin-left: auto;
@@ -279,7 +363,6 @@
   }
   .clear-chat-btn:hover { background: #eaeaea; }
 
-  /* messages area */
   .messages-area {
     flex: 1;
     overflow-y: auto;
@@ -291,7 +374,6 @@
     scroll-behavior: smooth;
   }
 
-  /* welcome bubble */
   .welcome-bubble {
     align-self: flex-start;
     display: flex;
@@ -315,7 +397,6 @@
     line-height: 1.6;
   }
 
-  /* chat bubbles */
   .msg-row {
     display: flex;
     align-items: flex-end;
@@ -337,7 +418,6 @@
     font-size: 1.3rem;
     flex-shrink: 0;
   }
-
   .msg-bubble {
     padding: 13px 18px;
     border-radius: 20px;
@@ -352,11 +432,8 @@
     color: #1e1e1e;
     border-radius: 20px 20px 4px 20px;
   }
-  .bot-row .msg-bubble {
-    border-radius: 20px 20px 20px 4px;
-  }
+  .bot-row .msg-bubble { border-radius: 20px 20px 20px 4px; }
 
-  /* thinking */
   .thinking-row {
     align-self: flex-start;
     display: flex;
@@ -380,7 +457,6 @@
     30%          { transform: translateY(-8px); opacity:1;  }
   }
 
-  /* input area */
   .chat-input-area {
     background: var(--white);
     border-top: 2px solid var(--border);
@@ -436,7 +512,7 @@
     margin-top: 7px;
   }
 
-  /* ── success toast ── */
+  /* ── Toast ── */
   .toast {
     position: fixed;
     bottom: 30px;
@@ -456,10 +532,7 @@
     pointer-events: none;
     white-space: nowrap;
   }
-  .toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
   /* ── responsive ── */
   @media (max-width: 540px) {
@@ -468,10 +541,34 @@
     .home-header .title { font-size: 1.65rem; }
     .msg-row     { max-width: 90%; }
     .welcome-bubble { max-width: 90%; }
+    .setup-card { padding: 32px 20px 28px; }
   }
 </style>
 </head>
 <body>
+
+<!-- ══════════════════════════════════════
+     SETUP SCREEN (first-time only)
+══════════════════════════════════════ -->
+<div id="setupScreen">
+  <div class="setup-card">
+    <div class="setup-icon">🔑</div>
+    <div class="setup-title">One-Time Setup</div>
+    <div class="setup-sub">
+      Enter the API key below to activate all four AI agents.<br>
+      This is done once — she will never see this screen again.
+    </div>
+    <input
+      class="setup-input"
+      id="setupKeyInput"
+      type="password"
+      placeholder="Paste your Anthropic API key here…"
+      onkeydown="if(event.key==='Enter') saveKey()"
+    />
+    <button class="setup-btn" onclick="saveKey()">✅ Save &amp; Open Hub</button>
+    <div class="setup-error" id="setupError"></div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════
      HOME SCREEN
@@ -480,6 +577,7 @@
 
   <div class="home-header">
     <div class="title">👋 Welcome to Your Hub</div>
+    <button class="settings-btn" onclick="openSetup()" title="Update API Key">⚙️</button>
   </div>
 
   <div class="agent-grid">
@@ -533,7 +631,6 @@
         <div class="fn">Daily<br>Reports</div>
         <div class="fc">Ready</div>
       </div>
-      <!-- Terry Lee Messages — popup -->
       <div class="folder-tile clickable" onclick="openTerryPopup()" title="Send a message to Terry Lee">
         <div class="fi">📧</div>
         <div class="fn">Terry Lee<br>Messages</div>
@@ -574,10 +671,11 @@
       ></textarea>
       <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
     </div>
-    <div class="hint-text" id="hintText">Press Enter to send &nbsp;•&nbsp; Shift+Enter for a new line</div>
+    <div class="hint-text">Press Enter to send &nbsp;•&nbsp; Shift+Enter for a new line</div>
   </div>
 
 </div><!-- end chatScreen -->
+
 
 <!-- ══════════════════════════════════════
      TERRY LEE POPUP
@@ -591,10 +689,9 @@
     background:#fff; border-radius:28px;
     padding:36px 30px 28px; max-width:480px; width:100%;
     box-shadow:0 20px 60px rgba(0,0,0,0.22);
-    position:relative; animation:popIn 0.22s ease;
+    position:relative;
     border-top: 7px solid var(--blue);">
 
-    <!-- close X -->
     <button onclick="closeTerryPopup()" style="
       position:absolute; top:16px; right:18px;
       background:#f0f0f0; border:none; border-radius:50%;
@@ -602,7 +699,6 @@
       cursor:pointer; display:flex; align-items:center; justify-content:center;
       font-family:'Nunito',sans-serif; color:#666;">✕</button>
 
-    <!-- header -->
     <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
       <div style="
         width:54px; height:54px; border-radius:50%;
@@ -614,7 +710,6 @@
       </div>
     </div>
 
-    <!-- textarea -->
     <textarea id="terryMsg" rows="5" placeholder="Type your message to Terry here…" style="
       width:100%; border:2.5px solid #ddd; border-radius:18px;
       padding:14px 16px; font-family:'Nunito',sans-serif;
@@ -623,7 +718,6 @@
       onfocus="this.style.borderColor='#3a82d4'"
       onblur="this.style.borderColor='#ddd'"></textarea>
 
-    <!-- send button -->
     <button id="terrySendBtn" onclick="sendTerryMessage()" style="
       width:100%; padding:16px; background:var(--blue);
       color:#fff; border:none; border-radius:50px;
@@ -631,23 +725,56 @@
       font-weight:900; cursor:pointer; transition:opacity 0.15s;">
       📨 Send to Terry
     </button>
-
   </div>
 </div>
 
-<!-- Toast notification -->
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-/* ─── EmailJS init ───────────────────────────────────────
-   Replace the three placeholders below with your real
-   EmailJS Public Key, Service ID, and Template ID.
-   Sign up free at https://www.emailjs.com
-──────────────────────────────────────────────────────── */
-const EJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';   // e.g. 'user_aBcDeFgH...'
-const EJS_SERVICE_ID  = 'YOUR_SERVICE_ID';            // e.g. 'service_xxxxxxx'
-const EJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';           // e.g. 'template_xxxxxxx'
+/* ═══════════════════════════════════
+   EmailJS — fill in your IDs below
+═══════════════════════════════════ */
+const EJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+const EJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+const EJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
 emailjs.init(EJS_PUBLIC_KEY);
+
+/* ═══════════════════════════════════
+   API KEY — stored in browser only
+═══════════════════════════════════ */
+const KEY_STORE = 'hub_anthropic_key';
+
+function getApiKey() {
+  return localStorage.getItem(KEY_STORE) || '';
+}
+
+function saveKey() {
+  const val = document.getElementById('setupKeyInput').value.trim();
+  const err = document.getElementById('setupError');
+  if (!val.startsWith('sk-ant-')) {
+    err.textContent = '⚠️ That doesn\'t look right. The key should start with sk-ant-';
+    return;
+  }
+  localStorage.setItem(KEY_STORE, val);
+  err.textContent = '';
+  showHome();
+}
+
+function openSetup() {
+  document.getElementById('setupKeyInput').value = getApiKey();
+  document.getElementById('setupError').textContent = '';
+  document.getElementById('homeScreen').classList.remove('active');
+  document.getElementById('chatScreen').classList.remove('active');
+  document.getElementById('setupScreen').classList.add('active');
+  setTimeout(() => document.getElementById('setupKeyInput').focus(), 100);
+}
+
+function showHome() {
+  document.getElementById('setupScreen').classList.remove('active');
+  document.getElementById('chatScreen').classList.remove('active');
+  document.getElementById('homeScreen').classList.add('active');
+}
 
 /* ═══════════════════════════════════
    AGENT DEFINITIONS
@@ -663,7 +790,6 @@ const AGENTS = {
     status:  '● Online & Ready',
     welcome: "Hello! I'm your Caregiver Support Agent. 🌸\n\nI'm here to help you with everything related to caring for your sister — schedules, tips, emotional support, resources, and more.\n\nHow can I help you today?",
     system:  "You are a warm, patient, and knowledgeable Caregiver Support Agent (CGS). You are helping an 80-year-old woman who lovingly cares for her sister at home. Always speak in simple, clear, plain English — short sentences, no jargon. Be gentle, encouraging, and empathetic. Help with caregiving schedules, care tips, emotional support, finding resources, and answering caregiving questions. When you create any document, schedule, or written summary, tell her clearly: 'I have saved this to your Caregiver Documents folder on your desktop.' Always end responses with a warm, encouraging note.",
-    isTerry: false
   },
   ihss: {
     name:    '🏥 IHSS Agent',
@@ -675,7 +801,6 @@ const AGENTS = {
     status:  '● Online & Ready',
     welcome: "Hello! I'm your IHSS Agent. 🏥\n\nI can help you navigate In-Home Supportive Services — including paperwork, timesheets, hours, assessments, and your benefits.\n\nWhat do you need help with today?",
     system:  "You are a helpful, patient IHSS (In-Home Supportive Services) assistant. You are helping an 80-year-old caregiver navigate the IHSS system in California. Always use very simple, plain English. No government jargon. Explain IHSS eligibility, timesheets, authorized hours, reassessments, appeals, and any benefits clearly step by step. Be reassuring and never make her feel overwhelmed. When you create any document, form summary, or written guide, tell her: 'I have saved this to your IHSS Documents folder on your desktop.'",
-    isTerry: false
   },
   chat: {
     name:    '💬 Claude Chat Agent',
@@ -687,7 +812,6 @@ const AGENTS = {
     status:  '● Online & Ready',
     welcome: "Hello! I'm Claude, your personal assistant. 💬\n\nYou can ask me absolutely anything — recipes, health questions, news, advice, stories, or just have a friendly chat.\n\nWhat's on your mind today?",
     system:  "You are a warm, friendly personal assistant for an 80-year-old woman. She may ask you anything — recipes, general knowledge, health questions, news, advice, or just conversation. Always speak in simple, clear, plain English. Use short sentences and a conversational tone. Be patient, kind, and never condescending. If she seems confused, gently clarify. Make her feel comfortable and cared for.",
-    isTerry: false
   },
   tracker: {
     name:    '📋 Daily Tracker Agent',
@@ -699,7 +823,6 @@ const AGENTS = {
     status:  '● Online & Ready',
     welcome: "Hello! I'm your Daily Tracker Agent. 📋\n\nTell me about your day — medications taken, meals, how your sister is feeling, any appointments, and any concerns you have.\n\nI'll organize everything into a clear daily report for you.\n\nWhat would you like to log today?",
     system:  "You are a Daily Care Tracker assistant for an 80-year-old caregiver. She will tell you about her day and her sister's care. Help her log: medications taken (name, time, dose), meals eaten, mood and energy levels, appointments, any symptoms or concerns, and anything else noteworthy. As she tells you things, organize them in a friendly, conversational way. When she is done or asks for a report, produce a clean, easy-to-read Daily Care Report with clear sections. Tell her: 'I have saved today's Daily Report to your Daily Reports folder on your desktop.' Be warm, encouraging, and never rush her.",
-    isTerry: false
   },
 };
 
@@ -711,6 +834,17 @@ let history      = [];
 let isThinking   = false;
 
 /* ═══════════════════════════════════
+   BOOT — show setup or home
+═══════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  if (getApiKey()) {
+    showHome();
+  } else {
+    openSetup();
+  }
+});
+
+/* ═══════════════════════════════════
    NAVIGATION
 ═══════════════════════════════════ */
 function openChat(key) {
@@ -718,28 +852,26 @@ function openChat(key) {
   history      = [];
   const a = AGENTS[key];
 
-  document.getElementById('chatAgentIcon').textContent       = a.emoji;
-  document.getElementById('chatAgentIcon').style.background  = a.bgLight;
-  document.getElementById('chatAgentName').textContent       = a.short;
-  document.getElementById('chatAgentName').style.color       = a.color;
-  document.getElementById('chatAgentStatus').textContent     = a.status;
-  document.getElementById('sendBtn').style.background        = a.color;
-  document.getElementById('msgInput').style.borderColor      = a.color + '88';
-  document.getElementById('msgInput').placeholder = 'Type your message here…';
-  document.getElementById('hintText').textContent = 'Press Enter to send  •  Shift+Enter for a new line';
+  document.getElementById('chatAgentIcon').textContent      = a.emoji;
+  document.getElementById('chatAgentIcon').style.background = a.bgLight;
+  document.getElementById('chatAgentName').textContent      = a.short;
+  document.getElementById('chatAgentName').style.color      = a.color;
+  document.getElementById('chatAgentStatus').textContent    = a.status;
+  document.getElementById('sendBtn').style.background       = a.color;
+  document.getElementById('msgInput').style.borderColor     = a.color + '88';
 
   const ma = document.getElementById('messagesArea');
   ma.innerHTML = '';
   addWelcomeBubble(a);
 
-  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('homeScreen').classList.remove('active');
   document.getElementById('chatScreen').classList.add('active');
   document.getElementById('msgInput').focus();
 }
 
 function goHome() {
   document.getElementById('chatScreen').classList.remove('active');
-  document.getElementById('homeScreen').style.display = 'block';
+  showHome();
   currentAgent = null;
   history      = [];
 }
@@ -753,7 +885,7 @@ function clearChat() {
 }
 
 /* ═══════════════════════════════════
-   SEND — routes to email or Claude
+   SEND MESSAGE
 ═══════════════════════════════════ */
 async function sendMessage() {
   const input = document.getElementById('msgInput').value.trim();
@@ -766,7 +898,6 @@ async function sendMessage() {
   autoResize(document.getElementById('msgInput'));
 
   addBubble('user', input, null, null);
-
   history.push({ role: 'user', content: input });
   await sendToClaude(a);
 
@@ -776,7 +907,6 @@ async function sendMessage() {
   scrollBottom();
 }
 
-/* ── Claude path ── */
 async function sendToClaude(a) {
   const thinkEl = addThinkingIndicator(a);
   scrollBottom();
@@ -784,12 +914,17 @@ async function sendToClaude(a) {
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type':      'application/json',
+        'x-api-key':         getApiKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
       body: JSON.stringify({
-        model:      'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        model:      'claude-opus-4-5',
+        max_tokens: 1024,
         system:     a.system,
-        messages:   history
+        messages:   history,
       })
     });
 
@@ -889,10 +1024,8 @@ async function sendTerryMessage() {
       message:   msg,
       sent_at:   new Date().toLocaleString('en-US', { dateStyle:'full', timeStyle:'short' })
     });
-
     closeTerryPopup();
     showToast('✅ Your message was sent to Terry!');
-
   } catch(err) {
     btn.disabled = false;
     btn.textContent = '📨 Send to Terry';
@@ -900,12 +1033,13 @@ async function sendTerryMessage() {
   }
 }
 
-// close popup if clicking outside the card
 document.getElementById('terryOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeTerryPopup();
 });
 
-
+/* ═══════════════════════════════════
+   UTILS
+═══════════════════════════════════ */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -913,9 +1047,6 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-/* ═══════════════════════════════════
-   UTILS
-═══════════════════════════════════ */
 function scrollBottom() {
   const ma = document.getElementById('messagesArea');
   setTimeout(() => { ma.scrollTop = ma.scrollHeight; }, 60);
