@@ -1,0 +1,19 @@
+{
+  "name": "My Care Hub",
+  "short_name": "Care Hub",
+  "description": "Your personal caregiver assistant hub",
+  "start_url": "/Maureen/",
+  "scope": "/Maureen/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f0eb",
+  "theme_color": "#b565c0",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
