@@ -1,4 +1,4 @@
-const CACHE = 'care-hub-v1';
+const CACHE = 'care-hub-v2';
 const ASSETS = ['./', './index.html', './icon.svg', './manifest.json'];
 
 self.addEventListener('install', e => {
