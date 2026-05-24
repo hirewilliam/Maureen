@@ -403,7 +403,7 @@
     <button class="agent-btn skin-pink"   onclick="openChat('cgs')">
       <div class="a-icon">🌸</div>
       <div class="a-name">CGA<br>Caregiver Agent</div>
-      <div class="a-desc">Caregiving support, schedules &amp; emotional help for your sister</div>
+      <div class="a-desc">Caregiving support, schedules &amp; emotional help for your loved one</div>
       <div class="a-open">Open Chat</div>
     </button>
     <button class="agent-btn skin-green"  onclick="openChat('ihss')">
@@ -428,8 +428,8 @@
 
   <div class="folders-wrap">
     <div class="folders-row" style="grid-template-columns: 1fr; max-width: 200px; margin: 0 auto;">
-      <div class="folder-tile clickable" onclick="openTerryPopup()" title="Send a message to Terry Lee">
-        <div class="fi">📧</div><div class="fn">Terry Lee<br>Messages</div><div class="fc">Tap to Message</div>
+      <div class="folder-tile clickable" onclick="openTerryPopup()" title="Send a message to your contact">
+        <div class="fi">📧</div><div class="fn">Send a<br>Message</div><div class="fc">Tap to Message</div>
       </div>
     </div>
   </div>
@@ -491,12 +491,12 @@
     <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
       <div style="width:54px; height:54px; border-radius:50%; background:var(--blue-lt); display:flex; align-items:center; justify-content:center; font-size:2rem;">📧</div>
       <div>
-        <div style="font-size:1.45rem; font-weight:900; color:var(--blue-dk);">Message Terry Lee</div>
-        <div style="font-size:0.92rem; font-weight:700; color:#888;">She'll receive your message by email</div>
+        <div style="font-size:1.45rem; font-weight:900; color:var(--blue-dk);">Send a Message</div>
+        <div style="font-size:0.92rem; font-weight:700; color:#888;">Your contact will receive this by email</div>
       </div>
     </div>
-    <textarea id="terryMsg" rows="5" placeholder="Type your message to Terry here…" style="width:100%; border:2.5px solid #ddd; border-radius:18px; padding:14px 16px; font-family:'Nunito',sans-serif; font-size:1.08rem; font-weight:600; resize:none; outline:none; line-height:1.55; transition:border-color 0.15s; margin-bottom:16px;" onfocus="this.style.borderColor='#3a82d4'" onblur="this.style.borderColor='#ddd'"></textarea>
-    <button id="terrySendBtn" onclick="sendTerryMessage()" style="width:100%; padding:16px; background:var(--blue); color:#fff; border:none; border-radius:50px; font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:900; cursor:pointer; transition:opacity 0.15s;">📨 Send to Terry</button>
+    <textarea id="terryMsg" rows="5" placeholder="Type your message here…" style="width:100%; border:2.5px solid #ddd; border-radius:18px; padding:14px 16px; font-family:'Nunito',sans-serif; font-size:1.08rem; font-weight:600; resize:none; outline:none; line-height:1.55; transition:border-color 0.15s; margin-bottom:16px;" onfocus="this.style.borderColor='#3a82d4'" onblur="this.style.borderColor='#ddd'"></textarea>
+    <button id="terrySendBtn" onclick="sendTerryMessage()" style="width:100%; padding:16px; background:var(--blue); color:#fff; border:none; border-radius:50px; font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:900; cursor:pointer; transition:opacity 0.15s;">📨 Send Message</button>
   </div>
 </div>
 
@@ -552,23 +552,23 @@ function showHome() {
 const AGENTS = {
   cgs: {
     short: 'CGA Caregiver', emoji: '🌸', color: '#b565c0', bgLight: '#f7eefa', bgDots: '#d99ee4',
-    welcome: "Hello! I'm your Caregiver Support Agent. 🌸\n\nI'm here to help you with everything related to caring for your sister — schedules, tips, emotional support, resources, and more.\n\nHow can I help you today?",
-    system: "You are a warm, patient, and knowledgeable Caregiver Support Agent (CGA). You are helping an 80-year-old woman who lovingly cares for her sister at home. Always speak in simple, clear, plain English — short sentences, no jargon. Be gentle, encouraging, and empathetic. Help with caregiving schedules, care tips, emotional support, finding resources, and answering caregiving questions. When you create any document, schedule, or written summary, tell her clearly: 'I have saved this to your Caregiver Documents folder on your desktop.' Always end responses with a warm, encouraging note.",
+    welcome: "Hello! I'm your Caregiver Support Agent. 🌸\n\nI'm here to help you with everything related to caregiving — schedules, tips, emotional support, resources, and more.\n\nHow can I help you today?",
+    system: "You are a warm, patient, and knowledgeable Caregiver Support Agent (CGA). You are helping a caregiver who lovingly cares for a loved one at home. Always speak in simple, clear, plain English — short sentences, no jargon. Be gentle, encouraging, and empathetic. Help with caregiving schedules, care tips, emotional support, finding resources, and answering caregiving questions. When you create any document, schedule, or written summary, tell them clearly: 'I have saved this to your Caregiver Documents folder on your desktop.' Always end responses with a warm, encouraging note.",
   },
   ihss: {
     short: 'IHSS Agent', emoji: '🏥', color: '#3aab6e', bgLight: '#e8f8ef', bgDots: '#7ecfa4',
     welcome: "Hello! I'm your IHSS Agent. 🏥\n\nI can help you navigate In-Home Supportive Services — including paperwork, timesheets, hours, assessments, and your benefits.\n\nWhat do you need help with today?",
-    system: "You are a helpful, patient IHSS (In-Home Supportive Services) assistant. You are helping an 80-year-old caregiver navigate the IHSS system in California. Always use very simple, plain English. No government jargon. Explain IHSS eligibility, timesheets, authorized hours, reassessments, appeals, and any benefits clearly step by step. Be reassuring and never make her feel overwhelmed. When you create any document, form summary, or written guide, tell her: 'I have saved this to your IHSS Documents folder on your desktop.'",
+    system: "You are a helpful, patient IHSS (In-Home Supportive Services) assistant. You are helping a caregiver navigate the IHSS system. Always use very simple, plain English. No government jargon. Explain IHSS eligibility, timesheets, authorized hours, reassessments, appeals, and any benefits clearly step by step. Be reassuring and never make the user feel overwhelmed. When you create any document, form summary, or written guide, tell them: 'I have saved this to your IHSS Documents folder on your desktop.'",
   },
   chat: {
     short: 'Claude Chat', emoji: '💬', color: '#e87830', bgLight: '#fff0e6', bgDots: '#f0a870',
     welcome: "Hello! I'm Claude, your personal assistant. 💬\n\nYou can ask me absolutely anything — recipes, health questions, news, advice, stories, or just have a friendly chat.\n\nWhat's on your mind today?",
-    system: "You are a warm, friendly personal assistant for an 80-year-old woman. She may ask you anything — recipes, general knowledge, health questions, news, advice, or just conversation. Always speak in simple, clear, plain English. Use short sentences and a conversational tone. Be patient, kind, and never condescending. If she seems confused, gently clarify. Make her feel comfortable and cared for.",
+    system: "You are a warm, friendly personal assistant. The user may ask you anything — recipes, general knowledge, health questions, news, advice, or just conversation. Always speak in simple, clear, plain English. Use short sentences and a conversational tone. Be patient, kind, and never condescending. If the user seems confused, gently clarify. Make them feel comfortable and cared for.",
   },
   tracker: {
     short: 'Daily Tracker', emoji: '📋', color: '#d4a800', bgLight: '#fffae6', bgDots: '#e8cc60',
-    welcome: "Hello! I'm your Daily Tracker Agent. 📋\n\nTell me about your day — medications taken, meals, how your sister is feeling, any appointments, and any concerns you have.\n\nI'll organize everything into a clear daily report for you.\n\nWhat would you like to log today?",
-    system: "You are a Daily Care Tracker assistant for an 80-year-old caregiver. She will tell you about her day and her sister's care. Help her log: medications taken (name, time, dose), meals eaten, mood and energy levels, appointments, any symptoms or concerns, and anything else noteworthy. As she tells you things, organize them in a friendly, conversational way. When she is done or asks for a report, produce a clean, easy-to-read Daily Care Report with clear sections. Tell her: 'I have saved today's Daily Report to your Daily Reports folder on your desktop.' Be warm, encouraging, and never rush her.",
+    welcome: "Hello! I'm your Daily Tracker Agent. 📋\n\nTell me about your day — medications taken, meals, how your loved one is feeling, any appointments, and any concerns you have.\n\nI'll organize everything into a clear daily report for you.\n\nWhat would you like to log today?",
+    system: "You are a Daily Care Tracker assistant for a caregiver. They will tell you about their day and their loved one's care. Help them log: medications taken (name, time, dose), meals eaten, mood and energy levels, appointments, any symptoms or concerns, and anything else noteworthy. As they tell you things, organize them in a friendly, conversational way. When they are done or ask for a report, produce a clean, easy-to-read Daily Care Report with clear sections. Tell them: 'I have saved today's Daily Report to your Daily Reports folder on your desktop.' Be warm, encouraging, and never rush them.",
   },
 };
 
@@ -975,7 +975,7 @@ function openTerryPopup() {
   document.getElementById('terryOverlay').style.display = 'flex';
   document.getElementById('terryMsg').value = '';
   document.getElementById('terrySendBtn').disabled = false;
-  document.getElementById('terrySendBtn').textContent = '📨 Send to Terry';
+  document.getElementById('terrySendBtn').textContent = '📨 Send Message';
   setTimeout(() => document.getElementById('terryMsg').focus(), 100);
 }
 function closeTerryPopup() { document.getElementById('terryOverlay').style.display = 'none'; }
@@ -986,13 +986,13 @@ async function sendTerryMessage() {
   btn.disabled = true; btn.textContent = 'Sending…';
   try {
     await emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, {
-      to_email: 'info@hirewilliam.com', from_name: 'Care Hub', message: msg,
+      to_email: 'YOUR_CONTACT_EMAIL', from_name: 'Care Hub', message: msg,
       sent_at:  new Date().toLocaleString('en-US', { dateStyle:'full', timeStyle:'short' })
     });
     closeTerryPopup();
-    showToast('✅ Your message was sent to Terry!');
+    showToast('✅ Your message was sent!');
   } catch(err) {
-    btn.disabled = false; btn.textContent = '📨 Send to Terry';
+    btn.disabled = false; btn.textContent = '📨 Send Message';
     showToast('⚠️ Could not send. Please check your connection.');
   }
 }
