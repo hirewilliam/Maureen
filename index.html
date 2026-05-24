@@ -686,12 +686,16 @@ function saveConversation(agentKey) {
     messages: JSON.parse(JSON.stringify(history)),
   };
   stored.unshift(entry);
-  if (stored.length > 20) stored.pop();
-  localStorage.setItem(historyKey(agentKey), JSON.stringify(stored));
+  // Keep only last 7 days
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const trimmed = stored.filter(e => e.id > cutoff);
+  localStorage.setItem(historyKey(agentKey), JSON.stringify(trimmed));
 }
 
 function loadHistory(agentKey) {
-  return JSON.parse(localStorage.getItem(historyKey(agentKey)) || '[]');
+  const all     = JSON.parse(localStorage.getItem(historyKey(agentKey)) || '[]');
+  const cutoff  = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  return all.filter(e => e.id > cutoff);
 }
 
 /* ════════════════════════
