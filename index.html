@@ -216,6 +216,17 @@
   }
   .topbar-btn:hover { background: #eaeaea; }
   .topbar-btn.history-active { background: var(--blue-lt); color: var(--blue-dk); }
+  .topbar-btn.folder-linked  { background: var(--green-lt); color: var(--green-dk); }
+
+  .save-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 8px; margin-left: 46px;
+    background: #f0f0f0; border: none; border-radius: 50px;
+    padding: 6px 14px; font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem; font-weight: 800; color: #666;
+    cursor: pointer; transition: background 0.15s, color 0.15s;
+  }
+  .save-btn:hover { background: var(--green-lt); color: var(--green-dk); }
 
   /* messages area */
   .messages-area {
@@ -438,6 +449,7 @@
       <div class="agent-status">● Online &amp; Ready</div>
     </div>
     <div class="topbar-actions">
+      <button class="topbar-btn" id="folderBtn" onclick="linkFolder()">📁 Link Folder</button>
       <button class="topbar-btn" id="historyBtn" onclick="toggleHistory()">📜 History</button>
       <button class="topbar-btn" onclick="newChat()">🗑 New Chat</button>
     </div>
@@ -569,6 +581,91 @@ let currentAgent = null;
 let history      = [];
 let isThinking   = false;
 let historyOpen  = false;
+const folderHandles = {};
+
+/* ════════════════════════
+   INDEXEDDB — folder handles
+════════════════════════ */
+async function openDB() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open('CareHubDB', 1);
+    r.onupgradeneeded = e => e.target.result.createObjectStore('folders');
+    r.onsuccess = e => res(e.target.result);
+    r.onerror   = rej;
+  });
+}
+async function dbPut(key, val) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('folders', 'readwrite');
+    tx.objectStore('folders').put(val, key);
+    tx.oncomplete = res; tx.onerror = rej;
+  });
+}
+async function dbGet(key) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('folders', 'readonly');
+    const r  = tx.objectStore('folders').get(key);
+    r.onsuccess = e => res(e.target.result); r.onerror = rej;
+  });
+}
+
+/* ════════════════════════
+   FOLDER LINK & SAVE
+════════════════════════ */
+async function linkFolder() {
+  if (!currentAgent) return;
+  try {
+    const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    folderHandles[currentAgent] = handle;
+    await dbPut(currentAgent, handle);
+    updateFolderBtn(true);
+    showToast('✅ Folder linked! Tap 💾 Save on any response to save it.');
+  } catch(e) {
+    if (e.name !== 'AbortError') showToast('⚠️ Could not link folder. Please try again.');
+  }
+}
+
+async function loadFolderHandle(agentKey) {
+  const h = await dbGet(agentKey);
+  if (!h) return;
+  folderHandles[agentKey] = h;
+  updateFolderBtn(true);
+}
+
+function updateFolderBtn(linked) {
+  const btn = document.getElementById('folderBtn');
+  if (linked) { btn.textContent = '📁 Folder Linked'; btn.classList.add('folder-linked'); }
+  else        { btn.textContent = '📁 Link Folder';   btn.classList.remove('folder-linked'); }
+}
+
+async function saveDoc(text) {
+  const handle = folderHandles[currentAgent];
+  if (!handle) {
+    showToast('⚠️ Link a folder first — tap 📁 Link Folder above.');
+    return;
+  }
+  const perm = await handle.requestPermission({ mode: 'readwrite' });
+  if (perm !== 'granted') { showToast('⚠️ Permission needed. Please try again.'); return; }
+
+  const a        = AGENTS[currentAgent];
+  const now      = new Date();
+  const dateStr  = now.toLocaleDateString('en-US', { year:'numeric', month:'2-digit', day:'2-digit' }).replace(/\//g,'-');
+  const timeStr  = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false }).replace(':','-');
+  const filename = `${dateStr}_${timeStr}_${a.short.replace(/\s+/g,'-')}.txt`;
+  const content  = `Care Hub — ${a.short}\nDate: ${now.toLocaleString('en-US', { dateStyle:'full', timeStyle:'short' })}\n${'─'.repeat(50)}\n\n${text}`;
+
+  try {
+    const fh  = await handle.getFileHandle(filename, { create: true });
+    const writable = await fh.createWritable();
+    await writable.write(content);
+    await writable.close();
+    showToast('✅ Saved to your folder!');
+  } catch(e) {
+    showToast('⚠️ Could not save. Please re-link the folder.');
+  }
+}
 
 /* ── Boot ── */
 window.addEventListener('DOMContentLoaded', () => {
@@ -721,6 +818,9 @@ function openChat(key) {
   document.getElementById('homeScreen').classList.remove('active');
   document.getElementById('chatScreen').classList.add('active');
   document.getElementById('msgInput').focus();
+
+  updateFolderBtn(false);
+  loadFolderHandle(key);
 }
 
 function goHome() {
@@ -820,12 +920,27 @@ function addWelcomeBubble(a) {
 
 function addBubble(role, text, bgLight, emoji) {
   const ma  = document.getElementById('messagesArea');
+  const wrap = document.createElement('div');
+  wrap.style.display = 'contents';
+
   const row = document.createElement('div');
   row.className = `msg-row ${role === 'user' ? 'user-row' : 'bot-row'}`;
   if (role === 'bot') {
     row.innerHTML = `
       <div class="msg-avatar" style="background:${bgLight||'#eee'}">${emoji||'🤖'}</div>
       <div class="msg-bubble" style="background:${bgLight||'#eee'};color:#1e1e1e">${escHtml(text)}</div>`;
+    wrap.appendChild(row);
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'save-btn';
+    saveBtn.innerHTML = '💾 Save to Folder';
+    const captured = text;
+    saveBtn.onclick = () => saveDoc(captured);
+    wrap.appendChild(saveBtn);
+
+    ma.appendChild(wrap);
+    scrollBottom();
+    return wrap;
   } else {
     row.innerHTML = `
       <div class="msg-bubble">${escHtml(text)}</div>
