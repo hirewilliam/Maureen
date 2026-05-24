@@ -900,10 +900,52 @@ async function sendToClaude(a) {
     thinkEl.remove();
     history.push({ role: 'assistant', content: reply });
     addBubble('bot', reply, a.bgLight, a.emoji);
+    if (isDocument(reply) && folderHandles[currentAgent]) {
+      showSavePrompt(reply, a);
+    }
   } catch(err) {
     thinkEl.remove();
     addBubble('bot', '⚠️ Could not reach Claude. Please check your internet connection and try again.', '#fff0f0', '⚠️');
   }
+}
+
+function isDocument(text) {
+  const triggers = [
+    'i have saved this', 'saved to your', 'saved today',
+    'daily care report', 'care report', 'care schedule',
+    'here is your', 'here\'s your', 'i\'ve created', 'i have created',
+    'i\'ve prepared', 'i have prepared', 'below is your', 'document is ready'
+  ];
+  return triggers.some(t => text.toLowerCase().includes(t));
+}
+
+function showSavePrompt(docText, a) {
+  const ma  = document.getElementById('messagesArea');
+  const row = document.createElement('div');
+  row.className = 'msg-row bot-row';
+  row.innerHTML = `
+    <div class="msg-avatar" style="background:${a.bgLight}">${a.emoji}</div>
+    <div class="msg-bubble" style="background:${a.bgLight};color:#1e1e1e">
+      📁 Would you like me to save this document to your folder?
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button onclick="confirmSave(this,'${encodeURIComponent(docText)}')" style="
+          flex:1;padding:10px;background:var(--green);color:#fff;border:none;
+          border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.95rem;
+          font-weight:800;cursor:pointer;">✅ Yes, save it</button>
+        <button onclick="this.closest('.msg-row').remove()" style="
+          flex:1;padding:10px;background:#eee;color:#666;border:none;
+          border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.95rem;
+          font-weight:800;cursor:pointer;">No thanks</button>
+      </div>
+    </div>`;
+  ma.appendChild(row);
+  scrollBottom();
+}
+
+async function confirmSave(btn, encoded) {
+  const row = btn.closest('.msg-row');
+  await saveDoc(decodeURIComponent(encoded));
+  row.remove();
 }
 
 /* ════════════════════════
