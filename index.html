@@ -427,11 +427,7 @@
   </div>
 
   <div class="folders-wrap">
-    <div class="folders-label">📁 Your Desktop Folders</div>
-    <div class="folders-row">
-      <div class="folder-tile"><div class="fi">🌸</div><div class="fn">Caregiver<br>Documents</div><div class="fc">Ready</div></div>
-      <div class="folder-tile"><div class="fi">🏥</div><div class="fn">IHSS<br>Documents</div><div class="fc">Ready</div></div>
-      <div class="folder-tile"><div class="fi">📋</div><div class="fn">Daily<br>Reports</div><div class="fc">Ready</div></div>
+    <div class="folders-row" style="grid-template-columns: 1fr; max-width: 200px; margin: 0 auto;">
       <div class="folder-tile clickable" onclick="openTerryPopup()" title="Send a message to Terry Lee">
         <div class="fi">📧</div><div class="fn">Terry Lee<br>Messages</div><div class="fc">Tap to Message</div>
       </div>
@@ -628,10 +624,12 @@ async function linkFolder() {
 }
 
 async function loadFolderHandle(agentKey) {
-  const h = await dbGet(agentKey);
-  if (!h) return;
-  folderHandles[agentKey] = h;
-  updateFolderBtn(true);
+  try {
+    const h = await dbGet(agentKey);
+    if (!h) return;
+    folderHandles[agentKey] = h;
+    updateFolderBtn(true);
+  } catch(e) { /* IndexedDB unavailable — silently skip */ }
 }
 
 function updateFolderBtn(linked) {
